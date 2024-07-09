@@ -1,20 +1,18 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
 func main() {
-	fmt.Println("hello world!")
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		n, err := fmt.Fprintf(w, "Hello world!")
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(fmt.Sprintf("Number of bytes: %d", n))
+	})
 
-	var whatToSay string
-	var i int
-	whatToSay = "Goodbye, cruel world!"
-	i = 7
-	fmt.Println(whatToSay)
-	fmt.Println("i is set to", i)
-	whatWasSaid := saySomething()
-	fmt.Println("The function said:", whatWasSaid)
-}
-
-func saySomething() string {
-	return "something"
+	_ = http.ListenAndServe(":8080", nil)
 }
